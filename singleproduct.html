@@ -1,0 +1,777 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Product Details</title>
+    <link rel="icon" href="images/copyright.png" type="image/png">
+
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.5/dist/css/bootstrap.min.css" rel="stylesheet"
+    integrity="sha384-SgOJa3DmI69IUzQ2PVdRZhwQ+dy64/BUtbMJw1MZ8t5HZApcHrRKUc4W0kG879m7" crossorigin="anonymous">
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.5/dist/js/bootstrap.bundle.min.js"
+    integrity="sha384-k6d4wzSIapyDyv1kpU366/PK5hCdSbCRGRCMv+eplOQJWyd1fbcAu9OCUj5zNLiq"
+    crossorigin="anonymous"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css"
+    integrity="sha512-1ycn6IcaQQ40/MKBW2W4Rhis/DbILU74C1vSrLJxCq57o941Ym01SwNsOMqvEBFlcgUa6xLiPY/NS5R+E6ztJQ=="
+    crossorigin="anonymous" referrerpolicy="no-referrer" />
+  <link rel="stylesheet" href="website.css">
+
+  <style>
+    body {
+      font-family: 'Helvetica Neue', sans-serif;
+      background-color: #f5f5f5;
+      margin: 0;
+      padding: 0;
+      color: #333;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+
+    h1 {
+      text-align: center;
+      font-size: 3rem;
+      color: #333;
+      margin-top: 10px;
+      margin-bottom: 10px;
+    }
+
+    .product-container {
+      margin-top: 30px;
+      width: 100vh;
+    }
+
+    .product-text {
+      background-color: #fff;
+      display: flex;
+      border-radius: 12px;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+
+
+    }
+
+    .product-left,
+    .product-right {
+      flex: 1 1 50%;
+      padding: 30px;
+    }
+
+    .product-left {
+      background-color: #fafafa;
+
+    }
+
+    .product-image {
+      max-width: 100%;
+      height: auto;
+      border-radius: 10px;
+      box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+      transition: transform 0.3s ease;
+    }
+
+    .product-image:hover {
+      transform: scale(1.05);
+    }
+
+    .product-info h4 {
+      font-size: 27px;
+      margin-bottom: 15px;
+      font-weight: 600;
+    }
+
+    .product-info h5 {
+      font-size: 17px;
+      color: #777;
+      margin-bottom: 15px;
+      font-weight: 400;
+    }
+
+    .product-info p {
+      font-size: 16px;
+      line-height: 1.6;
+    }
+
+    .product-details {
+      margin-top: 20px;
+    }
+
+    .product-details span {
+      display: block;
+      font-size: 15px;
+      color: #555;
+      margin-bottom: 6px;
+    }
+
+    .product-price {
+      font-size: 20px;
+      font-weight: bold;
+      margin: 20px 0;
+    }
+
+    .btn-add-to-cart {
+      background-color: #717fe0;
+      color: white;
+      padding: 12px 0px;
+      border: none;
+      border-radius: 8px;
+      font-weight: 600;
+      text-align: center;
+      text-decoration: none;
+      display: inline-block;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      width: 100%;
+    }
+
+    .btn-add-to-cart:hover {
+      background-color: #333;
+    }
+
+    .btn-wishlist {
+      background-color: #717fe0;
+      color: white;
+      padding: 12px 0px;
+      width: 100%;
+      display: inline-block;
+      text-decoration: none;
+      font-weight: 600;
+      text-align: center;
+      border-radius: 8px;
+      margin-top: 10px;
+      transition: all 0.3s ease;
+    }
+
+    .btn-wishlist:hover {
+      background-color: #333;
+
+    }
+
+
+    /* offcanvs  */
+    .cart-container {
+      flex: 2;
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+    }
+
+    .cart-item {
+      display: flex;
+      justify-content: space-between;
+      background: #fff;
+      padding: 20px;
+      border-radius: 10px;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+
+    }
+
+    .cart-left {
+      display: flex;
+      gap: 20px;
+    }
+
+    .cart-left img {
+      width: 80px;
+      height: 100px;
+      object-fit: cover;
+      border-radius: 6px;
+    }
+
+    .cart-details {
+      display: flex;
+      flex-direction: column;
+      gap: 0px;
+    }
+
+    .cart-right {
+      display: flex;
+      flex-direction: column;
+      align-items: flex-end;
+      justify-content: space-between;
+    }
+
+    .qty-box {
+      display: flex;
+      align-items: center;
+    }
+
+    .qty-box button {
+      padding: 1px 7px;
+      font-size: 16px;
+      border: 1px solid grey;
+    }
+
+    .qty-box input {
+      width: 50px;
+      border: 1px solid grey;
+      text-align: center;
+    }
+
+    .total-section {
+      background: #fff;
+      padding: 20px;
+      position: sticky;
+      text-align: left;
+      border-radius: 10px;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    }
+
+    #totalAmount {
+      flex: 1;
+    }
+
+    .empty-cart {
+      text-align: center;
+      font-size: 24px;
+      color: #888;
+      margin-top: 80px;
+    }
+
+    .remove-btn {
+      background-color: #717fe0;
+      color: white;
+      border: none;
+      padding: 6px 12px;
+      border-radius: 5px;
+
+    }
+  </style>
+</head>
+
+<body>
+  <div class="container-fluid">
+
+
+    <nav class="navbar navbar-expand-lg bg-body-tertiary justify-content-center sticky-top">
+      <div class="container-fluid">
+        <a class="navbar-brand p-3" href="#" style="margin-left: 50px;">
+          <img src="images/logo-01.png" class="img-fluid" width="90%" alt="">
+        </a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent"
+          aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+          <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse justify-content-center" id="navbarSupportedContent">
+          <ul class="navbar-nav mt-2 mb-lg-0 gap-3" style="font-size: 18px;">
+            <li class="nav-item">
+              <a class="nav-link menu" href="website.html">Home</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link menu" href="#productOverview">Shop</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link menu" href="#feature">Features</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link menu" href="#blog">Blog</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link menu" href="#about">About</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link menu" href="">Contact</a>
+            </li>
+          </ul>
+
+          <form class="d-flex align-items-center gap-1 pt-5  ps-5" role="search">
+            <button id="loginButton" type="button" class="position-relative top-0 start-50 border-0 translate-middle"
+              style="width: 3rem; height:3rem; background-color: transparent;">
+
+              <a href="login.html" style="color: inherit; text-decoration: none;">
+                <i class="fas fa-user fa-lg"></i>
+              </a>
+            </button>
+
+            <div id="userInfo" class=" position-relative top-0 start-50 translate-middle text-center"
+              style="display: none;">
+              <button onclick="logout()" type="button" id="usernameDisplay" class="border-0" style="width: 3rem; height:3rem; background-color: transparent;
+                            font-size:17px; color:#586be8;font-weight: bold;">
+              </button>
+            </div>
+
+            <button type="button" class="position-relative top-0 start-50 border-0 translate-middle"
+              style="width: 3rem; height:3rem;background-color: transparent; ">
+              <a href="wishlist.html" style="color: black;">
+                <i class="far fa-heart fa-lg"></i>
+                <span id="wishcount"
+                  style="height: 20px; width: 20px; position: absolute; top: -1px;right: 1px; background-color: black; color: white; border-radius: 50%; padding: 1px 6px; font-size: 12px;">0</span>
+              </a>
+            </button>
+            <button class="position-relative top-0 start-50 border-0 translate-middle"
+              style="width: 3rem; height:3rem; background-color: transparent;" type="button" data-bs-toggle="offcanvas"
+              data-bs-target="#offcanvasCart" aria-controls="offcanvasCart">
+              <i class="fas fa-shopping-cart fa-lg"></i>
+              <span id="cartcount"
+                style="height: 20px; width: 20px; position: absolute; top: -4px;right: 1px;background-color: black; color: white; border-radius: 50%; padding: 1px 6px; font-size: 12px;">0</span>
+            </button>
+          </form>
+        </div>
+      </div>
+    </nav>
+
+    <!-- cart off-canvas -->
+
+    <div class="offcanvas offcanvas-end" tabindex="-1" id="offcanvasCart" aria-labelledby="offcanvasCartLabel">
+      <div class="offcanvas-header">
+        <h5 class="offcanvas-title" id="offcanvasCartLabel">Your Cart</h5>
+        <button type="button" class="btn-close text-reset" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+      </div>
+      <div class="offcanvas-body">
+        <div id="cartItems" class="cart-container"></div>
+        <div id="totalAmount"></div>
+        <div class="d-flex gap-2 mt-3">
+          <button class="btn btn-primary"><a href="cart.html" style="color: white;text-decoration: none;">View
+              Cart</a></button>
+          <button class="btn btn-primary" onclick="processCheckout()"><a href="checkout.html"
+              style="text-decoration:none;color:white">Process Checkout</a></button>
+
+        </div>
+      </div>
+    </div>
+    <script>
+
+      let cartItem = JSON.parse(localStorage.getItem("cart")) || []
+      const cartContainer = document.getElementById("cartItems")
+      const totalDiv = document.getElementById("totalAmount")
+
+      if (cartItem.length === 0) {
+        cartContainer.innerHTML = `<div class="empty-cart">🛒 Your cart is empty</div>`;
+
+      } else {
+        cartItem.forEach((item, index) => {
+          const card = document.createElement("div");
+          card.className = "cart-item";
+          card.innerHTML = `
+                <div class="cart-left">
+                    <img src="${item.image}" alt="${item.desc}">
+                    <div class="cart-details">
+                        <h5>${item.desc}</h5>
+                        <p>Brand: ${item.brand}</p>
+                        <p>Color: ${item.color}</p>
+                        <p>Price: ₹${item.price.toLocaleString()}</p>
+                        
+            </div>
+          </div>
+          <div class="cart-right">
+            <p id="total-${index}" class="fw-bold">₹${item.price.toLocaleString()}</p>
+            <button class="remove-btn" onclick="removeItem(${index})">Remove</button>
+          </div>
+          `;
+          cartContainer.appendChild(card);
+
+        });
+
+
+      }
+
+      
+
+      function removeItem(index) {
+        let items = JSON.parse(localStorage.getItem("cart")) || [];
+        items.splice(index, 1);
+        localStorage.setItem("cart", JSON.stringify(items));
+        location.reload();
+      }
+      // cart count
+      const cart = JSON.parse(localStorage.getItem('cart')) || [];
+      document.getElementById("cartcount").textContent = cart.length;
+
+       // wish count
+        const wish = JSON.parse(localStorage.getItem('wish')) || [];
+        document.getElementById("wishcount").textContent = wish.length;
+
+    </script>
+  </div>
+
+  <h1>Product Details</h1>
+  <div class="product-container">
+    <div class="product-text">
+      <div class="product-left">
+        <img id="product-image" class="product-image" alt="Product Image">
+      </div>
+      <div class="product-right product-info">
+        <h4 id="product-title"></h4>
+        <h5 id="product-brand"></h5>
+        <p id="product-description"></p>
+        <div class="product-details">
+          <span id="product-color"></span>
+          <span id="product-stock"></span>
+          <span id="product-rating"></span>
+          <span class="category" id="product-cate"></span>
+        </div>
+        <p class="product-price" id="product-price"></p>
+        <a href="#" class="btn-add-to-cart" id="add-to-cart-btn">Add to Cart</a>
+        <a href="#" class="btn-wishlist" id="wishlist">Save to wishlist</a>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    const urlParams = new URLSearchParams(window.location.search);
+    const productId = parseInt(urlParams.get("id"));
+
+    const product = [
+      {
+        id: 1,
+        name: "Shirt",
+        desc: "Comfortable Cotton Shirt",
+        price: 2125,
+        brand: "EYEBOGLER",
+        color: "Navy",
+        image: "https://assets.ajio.com/medias/sys_master/root/20241219/lHU5/6764352ac148fa1b304ddfa4/-473Wx593H-467010736-navy-MODEL.jpg",
+        stock: 12,
+        discount: 10,
+        rating: 4.5,
+        category: "Men"
+      },
+      {
+        id: 2,
+        name: "Jeans",
+        desc: "Men Relaxed Jeans with Insert Pockets",
+        price: 3400,
+        color: "Blue",
+        brand: "SNITCH",
+        image: "https://assets.ajio.com/medias/sys_master/root/20250120/krGT/678e93b1663dbe1c5fe794e2/-473Wx593H-700180146-blue-MODEL.jpg",
+        stock: 5,
+        discount: 15,
+        rating: 4.0,
+        category: "Men"
+      },
+      {
+        id: 3,
+        name: "Jacket",
+        desc: "Denim Flap Pockets Jacket",
+        price: 5950,
+        brand: "DENNISLINGO PREMIUM ATTIRE",
+        color: "Black",
+        image: "https://assets.ajio.com/medias/sys_master/root/20230724/UZfx/64be1a8fa9b42d15c969d05f/-473Wx593H-465399076-black-MODEL.jpg",
+        stock: 8,
+        discount: 20,
+        rating: 4.8,
+        category: "Men"
+      },
+      {
+        id: 4,
+        name: "T-shirt",
+        desc: "Men Graphic Print Regular Fit Crew-Neck T-Shirt",
+        price: 1700,
+        color: "White",
+        brand: "Levi's",
+        image: "https://assets.ajio.com/medias/sys_master/root/20241127/sDE9/6746e6e10f47f80c87af7075/-473Wx593H-442711258-white-MODEL.jpg",
+        stock: 20,
+        discount: 5,
+        rating: 4.2,
+        category: "Men"
+      },
+      {
+        id: 5,
+        name: "Hoodie",
+        desc: "Men Typographic Hoodie",
+        price: 1870,
+        color: "Black",
+        brand: "TOGS & TERRE",
+        image: "https://assets.ajio.com/medias/sys_master/root/20241211/QgIi/6758bf580f47f80c87eda039/-1117Wx1400H-700905893-black-MODEL.jpg",
+        stock: 7,
+        discount: 12,
+        rating: 4.1,
+        category: "Men"
+      },
+      {
+        id: 6,
+        name: "Dress",
+        desc: "Women Kurta Set",
+        price: 3825,
+        color: "Beige",
+        brand: "SHOWOFF",
+        image: "https://assets.ajio.com/medias/sys_master/root/20250204/6m0g/67a2431abc78b543a920cda2/-473Wx593H-701165566-cream-MODEL.jpg",
+        stock: 10,
+        discount: 8,
+        rating: 4.6,
+        category: "Women"
+      },
+      {
+        id: 7,
+        name: "T-Shirts",
+        desc: "Women Typographic Print Oversized Fit T-Shirt",
+        price: 2550,
+        brand: "TOGS & TERRE",
+        color: "Blue",
+        image: "https://assets.ajio.com/medias/sys_master/root/20241002/kBDW/66fc76ee260f9c41e84c8b99/-473Wx593H-700521698-blue-MODEL.jpg",
+        stock: 6,
+        discount: 10,
+        rating: 4.0,
+        category: "Women"
+      },
+      {
+        id: 8,
+        name: "Jumpsuit",
+        desc: "Short-Sleeve Jumpsuit with Waist Tie-Up",
+        price: 2975,
+        color: "Pink",
+        brand: "FAVRIZ",
+        image: "https://assets.ajio.com/medias/sys_master/root/20230727/JpS5/64c29b50eebac147fc8fac09/-473Wx593H-466393680-black-MODEL.jpg",
+        stock: 14,
+        discount: 18,
+        rating: 4.4,
+        category: "Women"
+      },
+      {
+        id: 9,
+        name: "Skirt",
+        desc: "High-Rise A-Line Skirt",
+        price: 3400,
+        color: "Grey",
+        brand: "YOUSTA",
+        image: "https://assets.ajio.com/medias/sys_master/root/20250307/fV7R/67cabd6759f835398024ace4/-473Wx593H-443068596-ecru-MODEL.jpg",
+        stock: 9,
+        discount: 10,
+        rating: 4.3,
+        category: "Women"
+      },
+      {
+        id: 10,
+        name: "Trousers",
+        desc: "Straight Fit Pleat Front Trousers",
+        price: 5525,
+        color: "Beige",
+        brand: "KOTTY",
+        image: "https://assets.ajio.com/medias/sys_master/root/20230605/rLzy/647de5e442f9e729d7230a13/-473Wx593H-466236960-white-MODEL.jpg",
+        stock: 4,
+        discount: 25,
+        rating: 4.7,
+        category: "Women"
+      },
+      {
+        id: 11,
+        name: "Dress",
+        desc: "Girls Embellished Fit & Flare Dress",
+        price: 1275,
+        color: "White",
+        brand: "AVSAR TRENDZ",
+        image: "https://assets.ajio.com/medias/sys_master/root/20241206/vux2/6752d379c148fa1b301df214/-473Wx593H-700886671-white-MODEL.jpg",
+        stock: 15,
+        discount: 5,
+        rating: 4.2,
+        category: "Kids"
+      },
+      {
+        id: 12,
+        name: "Shorts",
+        desc: "Solid Mid Rise Cargo Shorts",
+        price: 1700,
+        color: "Navy",
+        brand: "BALISTA",
+        image: "https://assets.ajio.com/medias/sys_master/root/20220629/bm1M/62bb6b56f997dd03e2a607c4/-473Wx593H-464558803-navy-MODEL.jpg",
+        stock: 12,
+        discount: 10,
+        rating: 4.3,
+        category: "Kids"
+      },
+      {
+        id: 13,
+        name: "Shirt",
+        desc: "Boys Striped Shirt with Shorts",
+        price: 1550,
+        color: "White",
+        image: "https://assets.ajio.com/medias/sys_master/root/20250319/A7if/67daca4759f8353980495683/-473Wx593H-701355800-blue-MODEL.jpg",
+        stock: 6,
+        discount: 12,
+        rating: 4.6,
+        category: "Kids"
+      },
+      {
+        id: 14,
+        name: "Shorts",
+        desc: "Boys Crinkled Shirt with Shorts",
+        price: 1020,
+        brand: "FASTDEAL X AG",
+        color: "Beige",
+        image: "https://assets.ajio.com/medias/sys_master/root/20250319/iCce/67daca8759f8353980495fba/-473Wx593H-701355765-cream-MODEL.jpg",
+        stock: 8,
+        discount: 10,
+        rating: 4.1,
+        category: "Kids"
+      },
+      {
+        id: 15,
+        name: "Top",
+        desc: "Girls Floral Embroidered Top & Shorts Set",
+        price: 1530,
+        color: "Aqua",
+        brand: "INF FRENDZ",
+        image: "https://assets.ajio.com/medias/sys_master/root/20250212/uUhA/67ac9a3fbc78b543a93cf45a/-473Wx593H-443066343-ltaqua-MODEL.jpg",
+        stock: 11,
+        discount: 15,
+        rating: 4.5,
+        category: "Kids"
+      },
+      {
+        id: 16,
+        name: "T-Shirt",
+        desc: "Men Graphic Oversized Fit T-shirt",
+        price: 1200,
+        brand: "TEDERICH",
+        color: "Navy",
+        image: "https://assets.ajio.com/medias/sys_master/root/20241028/OjYf/671f676df9b8ef490be83558/-473Wx593H-700663710-navy-MODEL.jpg",
+        stock: 10,
+        discount: 20,
+        rating: 4.9,
+        category: "Men"
+      },
+      {
+        id: 17,
+        name: "Top",
+        desc: "Women Schiffli Embroidered Regular Fit Top",
+        price: 1750,
+        brand: "HOUSE OF MIRA",
+        color: "Peach",
+        image: "https://assets.ajio.com/medias/sys_master/root/20240710/i683/668df9f16f60443f31cd8078/-473Wx593H-700180538-peach-MODEL.jpg",
+        stock: 7,
+        discount: 25,
+        rating: 4.7,
+        category: "Women"
+      },
+      {
+        id: 18,
+        name: "Top",
+        desc: "V-Neck Fitted Tank Top",
+        price: 900,
+        brand: "NEUDIS",
+        color: "Wine",
+        image: "https://assets.ajio.com/medias/sys_master/root/20240207/cJdU/65c3372b8cdf1e0df5f17260/-473Wx593H-466313449-wine-MODEL.jpg",
+        stock: 5,
+        discount: 18,
+        rating: 4.6,
+        category: "Women"
+      },
+      {
+        id: 19,
+        name: "Jeans",
+        desc: "Boys Superstretch Slim Fit Jeans",
+        price: 2100,
+        brand: "H&M",
+        color: "Blue",
+        image: "https://assets.ajio.com/medias/sys_master/root/20250312/UPIv/67d1c12e2960820c49e80955/-473Wx593H-700322408-blue-MODEL.jpg",
+        stock: 9,
+        discount: 15,
+        rating: 4.4,
+        category: "Kids"
+      },
+      {
+        id: 20,
+        name: "Shirts",
+        desc: "Full Sleeves Slim Fit Shirt",
+        price: 1050,
+        color: "White",
+        brand: "Levi's",
+        image: "https://assets.ajio.com/medias/sys_master/root/20240924/usEp/66f25225260f9c41e81fb972/-473Wx593H-462323964-white-MODEL.jpg",
+        stock: 3,
+        discount: 10,
+        rating: 4.5,
+        category: "Men"
+      }
+    ];
+
+    const products = product.find((p) => p.id === productId);
+    console.log(products);
+
+    if (products) {
+      document.getElementById("product-title").textContent = products.name;
+      document.getElementById("product-brand").textContent = `Brand: ${products.brand}`;
+      document.getElementById("product-description").textContent = products.desc;
+      document.getElementById("product-cate").textContent = `Category: ${products.category}`;
+      document.getElementById("product-color").textContent = `Color: ${products.color}`;
+      document.getElementById("product-stock").textContent = `Stock: ${products.stock}`;
+      document.getElementById("product-rating").textContent = `Rating: ${products.rating} / 5`;
+      document.getElementById("product-image").src = products.image;
+      document.getElementById("product-price").textContent = `₹${products.price.toLocaleString()}`;
+
+      document.getElementById("add-to-cart-btn").addEventListener("click", function () {
+        alert(`Product ${products.name} added to cart!`);
+        addtocart(products);
+        window.location.href = 'website.html'
+      });
+
+
+      document.getElementById("wishlist").addEventListener("click", function () {
+        alert(`Product ${products.name} save to wishlist!`);
+        wishlistproduct(products);
+        window.location.href = 'website.html'
+      });
+
+
+
+    } else {
+      window.location.href = 'index.html';
+    }
+
+    function addtocart(product) {
+      let cart = JSON.parse(localStorage.getItem("cart")) || [];
+      let itemInCart = cart.find((item) => item.id === productId);
+      if (itemInCart) {
+        alert("Item is already in the cart.");
+        return;
+      }
+      cart.push(product);
+      localStorage.setItem("cart", JSON.stringify(cart));
+    }
+
+
+    function wishlistproduct(product) {
+      let wish = JSON.parse(localStorage.getItem("wish")) || []
+      let itemInWish = wish.find((item) => item.id === productId)
+      if (itemInWish) {
+        alert("Item is already in the wishlist.");
+        return;
+      }
+      wish.push(product);
+      localStorage.setItem("wish", JSON.stringify(wish));
+    }
+
+
+
+    // login-logout 
+
+    window.addEventListener("DOMContentLoaded", function () {
+      const loginbtn = localStorage.getItem("logIn") === "true";
+      const username = localStorage.getItem("loginUser");
+
+      const loginButton = document.getElementById("loginButton");
+      const userInfo = document.getElementById("userInfo");
+      const usernameDisplay = document.getElementById("usernameDisplay");
+
+      if (loginbtn && username) {
+        if (loginButton) {
+          loginButton.style.display = "none";
+        }
+        if (userInfo) {
+          userInfo.style.display = "block";
+        }
+        if (usernameDisplay) {
+          usernameDisplay.textContent = username;
+        }
+      }
+      else {
+        if (loginButton) {
+          loginButton.style.display = "block";
+        }
+        if (userInfo) {
+          userInfo.style.display = "none";
+
+        }
+      }
+    })
+
+    function logout() {
+      localStorage.setItem("logIn", "false");
+      localStorage.removeItem("loginUser");
+      alert("Logged out successfully.");
+      window.location.reload();
+    }
+
+
+  </script>
+</body>
+
+</html>

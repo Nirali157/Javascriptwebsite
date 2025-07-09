@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Invoice</title>
+    <link rel="icon" href="images/copyright.png" type="image/png">
+
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" />
+    <style>
+        body {
+            background-color: #f8f9fa;
+            padding: 40px;
+        }
+
+        .invoice-container {
+            max-width: 800px;
+            margin: 0 auto;
+            background: #fff;
+            padding: 30px;
+            border-radius: 12px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+
+        h2 {
+            margin-bottom: 30px;
+            text-transform: uppercase;
+            font-weight: 700;
+        }
+
+        .btn {
+            background-color: #717fe0;
+            color: white;
+            padding: 10px 50px;
+            font-size: 18px;
+        }
+
+        .btn:hover {
+            background-color: black;
+            color: white;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="invoice-container">
+        <h2 class="text-center">Invoice</h2>
+
+        <h4>Billing Information</h4>
+        <ul class="list-group mb-4" id="billingInfoList"></ul>
+
+        <h4>Order Summary</h4>
+        <ul class="list-group mb-4" id="orderSummaryList"></ul>
+
+        <div class="text-center">
+            <a href="website.html" class="btn">Back to Home</a>
+        </div>
+    </div>
+
+    <script>
+        function loadInvoice() {
+            const billingInfo = JSON.parse(localStorage.getItem("billingInfo"));
+           
+
+            const cartItems = JSON.parse(localStorage.getItem("cart")) || [];
+
+
+            const billingList = document.getElementById("billingInfoList");
+            billingList.innerHTML = "";
+
+            if (billingInfo) {
+                console.log(billingInfo);
+                for (const [key, value] of Object.entries(billingInfo)) {
+
+                    const label = key.replace(/([A-Z])/g, " $1")
+                        .replace(/^./, str => str.toUpperCase());
+
+                    const li = document.createElement("li");
+                    li.className = "list-group-item d-flex justify-content-between";
+                    li.innerHTML = `<strong>${label}</strong> <span>${value}</span>`;
+                    billingList.appendChild(li);
+                }
+            } else {
+                billingList.innerHTML = `<li class="list-group-item">No billing information found.</li>`;
+            }
+
+
+            const orderSummaryList = document.getElementById("orderSummaryList");
+            orderSummaryList.innerHTML = "";
+            let subtotal = 0;
+
+            if (cartItems.length === 0) {
+                orderSummaryList.innerHTML = `<li class="list-group-item">Your cart is empty.</li>`;
+                return;
+            }
+
+            cartItems.forEach(item => {
+                subtotal += item.price * (item.qty || 1);
+                const li = document.createElement("li");
+                li.className = "list-group-item d-flex justify-content-between";
+                li.innerHTML = `<span>${item.desc}</span> <strong>₹${(item.price * (item.qty || 1)).toLocaleString()}</strong>`;
+                orderSummaryList.appendChild(li);
+            });
+
+            let discountRate = 0;
+            if (subtotal >= 40000) discountRate = 20;
+            else if (subtotal >= 20000) discountRate = 15;
+            else if (subtotal >= 7000) discountRate = 5;
+
+            let discountAmount = subtotal * (discountRate / 100);
+            let discountSubTotal = subtotal - discountAmount;
+
+            const shipping = subtotal > 0 && subtotal <= 1000 ? 50 : 100;
+            const cgst = discountSubTotal * 0.09;
+            const sgst = discountSubTotal * 0.09;
+
+            const total = discountSubTotal + shipping + cgst + sgst;
+
+
+            if (discountRate > 0) {
+                const discountItem = document.createElement("li");
+                discountItem.className = "list-group-item d-flex justify-content-between text-danger";
+                discountItem.innerHTML = `<span>Discount (${discountRate}%)</span> <strong>-₹${discountAmount.toLocaleString()}</strong>`;
+                orderSummaryList.appendChild(discountItem);
+            }
+
+            const discountedSubtotalItem = document.createElement("li");
+            discountedSubtotalItem.className = "list-group-item d-flex justify-content-between";
+            discountedSubtotalItem.innerHTML = `<span>Subtotal after Discount</span> <strong>₹${discountSubTotal.toLocaleString()}</strong>`;
+            orderSummaryList.appendChild(discountedSubtotalItem);
+
+
+            const shippingItem = document.createElement("li");
+            shippingItem.className = "list-group-item d-flex justify-content-between";
+            shippingItem.innerHTML = `<span>Shipping</span> <strong>₹${shipping.toLocaleString()}</strong>`;
+            orderSummaryList.appendChild(shippingItem);
+
+            const cgstItem = document.createElement("li");
+            cgstItem.className = "list-group-item d-flex justify-content-between";
+            cgstItem.innerHTML = `<span>CGST (9%)</span> <strong>₹${cgst.toLocaleString()}</strong>`;
+            orderSummaryList.appendChild(cgstItem);
+
+            const sgstItem = document.createElement("li");
+            sgstItem.className = "list-group-item d-flex justify-content-between";
+            sgstItem.innerHTML = `<span>SGST (9%)</span> <strong>₹${sgst.toLocaleString()}</strong>`;
+            orderSummaryList.appendChild(sgstItem);
+
+            const totalItem = document.createElement("li");
+            totalItem.className = "list-group-item d-flex justify-content-between";
+            totalItem.innerHTML = `<span>Total</span> <strong>₹${total.toLocaleString()}</strong>`;
+            orderSummaryList.appendChild(totalItem);
+        }
+
+        document.addEventListener("DOMContentLoaded", loadInvoice);
+    </script>
+</body>
+
+</html>

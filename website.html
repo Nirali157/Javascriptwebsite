@@ -1,0 +1,478 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Website</title>
+    
+    <link rel="icon" href="images/copyright.png" type="image/png">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.5/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-SgOJa3DmI69IUzQ2PVdRZhwQ+dy64/BUtbMJw1MZ8t5HZApcHrRKUc4W0kG879m7" crossorigin="anonymous">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.5/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-k6d4wzSIapyDyv1kpU366/PK5hCdSbCRGRCMv+eplOQJWyd1fbcAu9OCUj5zNLiq"
+        crossorigin="anonymous"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css"
+        integrity="sha512-1ycn6IcaQQ40/MKBW2W4Rhis/DbILU74C1vSrLJxCq57o941Ym01SwNsOMqvEBFlcgUa6xLiPY/NS5R+E6ztJQ=="
+        crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <link rel="stylesheet" href="website.css">
+
+    <style>
+
+    </style>
+
+</head>
+
+<body>
+
+    <div id="loadingScreen">
+        Loading...
+    </div>
+    <div id="mainContent" style="display: none;">
+
+        <!-- Header -->
+        <nav class="navbar navbar-expand-lg bg-body-tertiary justify-content-center sticky-top">
+            <div class="container-fluid">
+                <a class="navbar-brand p-3" href="#" style="margin-left: 50px;">
+                    <img src="images/logo-01.png" class="img-fluid" width="90%" alt="">
+                </a>
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
+                    data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent"
+                    aria-expanded="false" aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+                <div class="collapse navbar-collapse justify-content-center" id="navbarSupportedContent">
+                    <ul class="navbar-nav mt-2 mb-lg-0 gap-3" style="font-size: 18px;">
+                        <li class="nav-item">
+                            <a class="nav-link menu" href="website.html">Home</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link menu" href="#productOverview">Shop</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link menu" href="#feature">Features</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link menu" href="#blog">Blog</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link menu" href="#about">About</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link menu" href="">Contact</a>
+                        </li>
+                    </ul>
+
+                    <form class="d-flex align-items-center gap-1 pt-5  ps-5" role="search">
+                        <button id="loginButton" type="button"
+                            class="position-relative top-0 start-50 border-0 translate-middle"
+                            style="width: 3rem; height:3rem; background-color: transparent;">
+
+                            <a href="login.html" style="color: inherit; text-decoration: none;">
+                                <i class="fas fa-user fa-lg"></i>
+                            </a>
+                        </button>
+
+                        <div id="userInfo" class=" position-relative top-0 start-50 translate-middle text-center"
+                            style="display: none;">
+                            <button onclick="logout()" type="button" id="usernameDisplay" class="border-0" style="width: 3rem; height:3rem; background-color: transparent;
+                            font-size:17px; color:#586be8;font-weight: bold;">
+                            </button>
+                        </div>
+
+                        <button type="button" class="position-relative top-0 start-50 border-0 translate-middle"
+                            style="width: 3rem; height:3rem;background-color: transparent; ">
+                            <a href="wishlist.html" style="color: black;">
+                                <i class="far fa-heart fa-lg"></i>
+                                <span id="wishcount"
+                                style="height: 20px; width: 20px; position: absolute; top: -1px;right: 1px; background-color: black; color: white; border-radius: 50%; padding: 1px 6px; font-size: 12px;">0</span>
+                            </a>
+                        </button>
+                        <button class="position-relative top-0 start-50 border-0 translate-middle"
+                            style="width: 3rem; height:3rem; background-color: transparent;" type="button"
+                            data-bs-toggle="offcanvas" data-bs-target="#offcanvasCart" aria-controls="offcanvasCart">
+                            <i class="fas fa-shopping-cart fa-lg"></i>
+                            <span id="cartcount"
+                                style="height: 20px; width: 20px; position: absolute; top: -4px;right: 1px;background-color: black; color: white; border-radius: 50%; padding: 1px 6px; font-size: 12px;">0</span>
+                        </button>
+                    </form>
+                </div>
+            </div>
+        </nav>
+
+        <!-- cart off-canvas -->
+
+        <div class="offcanvas offcanvas-end" tabindex="-1" id="offcanvasCart" aria-labelledby="offcanvasCartLabel">
+            <div class="offcanvas-header">
+                <h5 class="offcanvas-title" id="offcanvasCartLabel">Your Cart</h5>
+                <button type="button" class="btn-close text-reset" data-bs-dismiss="offcanvas"
+                    aria-label="Close"></button>
+            </div>
+            <div class="offcanvas-body">
+                <div id="cartItems" class="cart-container"></div>
+                <div id="totalAmount"></div>
+                <div class="d-flex gap-2 mt-3">
+                    <button class="btn btn-primary"><a href="cart.html" style="color: white;text-decoration: none;">View
+                            Cart</a></button>
+                    <button class="btn btn-primary" onclick="processCheckout()"><a href="checkout.html"
+                            style="text-decoration:none;color:white">Process Checkout</a></button>
+
+                </div>
+            </div>
+        </div>
+        <script>
+
+            let cartItem = JSON.parse(localStorage.getItem("cart")) || []
+            const cartContainer = document.getElementById("cartItems")
+            const totalDiv = document.getElementById("totalAmount")
+
+            if (cartItem.length === 0) {
+                cartContainer.innerHTML = `<div class="empty-cart">🛒 Your cart is empty</div>`;
+
+            } else {
+                cartItem.forEach((item, index) => {
+                    const card = document.createElement("div");
+                    card.className = "cart-item";
+                    card.innerHTML = `
+                <div class="cart-left">
+                    <img src="${item.image}" alt="${item.desc}">
+                    <div class="cart-details">
+                        <h5>${item.desc}</h5>
+                        <p>Brand: ${item.brand}</p>
+                        <p>Color: ${item.color}</p>
+                        <p>Price: ₹${item.price.toLocaleString()}</p>
+                        
+            </div>
+          </div>
+          <div class="cart-right">
+            <p id="total-${index}" class="fw-bold">₹${item.price.toLocaleString()}</p>
+            <button class="remove-btn" onclick="removeItem(${index})">Remove</button>
+          </div>
+          `;
+                    cartContainer.appendChild(card);
+
+                });
+
+
+            }
+
+           
+
+            function removeItem(index) {
+                let items = JSON.parse(localStorage.getItem("cart")) || [];
+                items.splice(index, 1);
+                localStorage.setItem("cart", JSON.stringify(items));
+                location.reload();
+            }
+
+
+        </script>
+
+
+        <!-- slider -->
+        <div class="container-fluid">
+            <div class="slider-container">
+                <div class="slider">
+                    <div class="slide position-relative">
+                        <img src="images/slide-01.jpg" alt="Slide 1">
+                        <div class="slide-content ">
+                            <h2>Women Collection</h2>
+                            <p>NEW SEASONS</p>
+                            <button class="btn btn-primary">SHOP NOW</button>
+                        </div>
+                    </div>
+                    <div class="slide position-relative">
+                        <img src="images/slide-02.jpg" alt="Slide 2">
+                        <div class="slide-content ">
+                            <h2>Men New Season</h2>
+                            <p>JACKETS & COATS</p>
+                            <button class="btn btn-primary">SHOP NOW</button>
+                        </div>
+                    </div>
+                    <div class="slide position-relative">
+                        <img src="images/slide-03.jpg" alt="Slide 3">
+                        <div class="slide-content">
+                            <h2>Men Collection</h2>
+                            <p>NEW ARRIVALS</p>
+                            <button class="btn btn-primary">SHOP NOW</button>
+                        </div>
+                    </div>
+                </div>
+                <button class="prevSlide" onclick="prevSlide()"><i class="fas fa-chevron-left"></i></button>
+                <button class="nextSlide" onclick="nextSlide()"><i class="fas fa-chevron-right"></i></button>
+            </div>
+        </div>
+
+        <!-- banner -->
+        <div class="container mb-4" id="feature">
+            <div class="row row-cols-1 row-cols-md-3 g-4 mt-5 ">
+                <div class="col">
+                    <div class="card" style="position: relative;" onclick="showWomen()">
+                        <img src="images/banner-01.jpg" class="card-img-top" alt="...">
+                        <div class="card-img-overlay p-5 overlay">
+                            <h4 class="card-title" style="font-weight:bold;">Women</h4>
+                            <p class="card-text">Spring 2024</p>
+                            <a href="" class="card-text click">SHOP NOW</a>
+                        </div>
+                    </div>
+                </div>
+                <div class="col">
+                    <div class="card" style="position: relative;" onclick="showMen()">
+                        <img src="images/banner-02.jpg" class="card-img-top" alt="...">
+                        <div class="card-img-overlay p-5 overlay">
+                            <h4 class="card-title" style="font-weight: bold;">Men</h4>
+                            <p class="card-text">Spring 2024</p>
+                            <a href="" class="card-text click">SHOP NOW</a>
+                        </div>
+                    </div>
+                </div>
+                <div class="col">
+                    <div class="card" style="position: relative;" onclick="showKid()">
+                        <img src="images/banner-03.jpg" class="card-img-top" alt="...">
+                        <div class="card-img-overlay p-5 overlay">
+                            <h4 class="card-title" style="font-weight: bold;">Kids</h4>
+                            <p class="card-text">New Trend </p>
+                            <a href="" class="card-text click">SHOP NOW</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+        <!-- product -->
+        <div class="container">
+            <h1 style="text-align: center; letter-spacing: 1px; font-weight:600; text-shadow: 2px 2px 5px #323131da;"
+                id="productOverview" class="mt-5 mb-5">PRODUCT OVERVIEW</h1>
+            <div class="row mb-4 pt-3 " style="display: flex; justify-content: center;">
+                <div class="col-md-4 ">
+                    <button class="btn  btn-outline-dark filter" onclick="filterbyCategory('All')">All Product</button>
+                    <button class="btn  btn-outline-dark filter" onclick="filterbyCategory('Men')">Men</button>
+                    <button class="btn  btn-outline-dark filter" onclick="filterbyCategory('Women')">Women</button>
+                    <button class="btn  btn-outline-dark filter" onclick="filterbyCategory('Kids')">Kids</button>
+                </div>
+                <div class="col-md-2">
+                    <input type="text" id="psearch" class="form-control filter" placeholder="Search by name"
+                        onkeyup="searchbyname()">
+                </div>
+                <div class="col-md-2">
+                    <select class="form-control filter" id="pprice" onclick="filterbyprice()">
+                        <option value="price1">Price Range</option>
+                        <option value="price2">0-999</option>
+                        <option value="price3">1000-2999</option>
+                        <option value="price4">3000-4999</option>
+                        <option value="price5">5000 or more</option>
+                    </select>
+                </div>
+                <div class="col-md-2">
+                    <button class="btn btn-outline-dark w-100 filter" onclick="sortbyname()">SortByName</button>
+                </div>
+
+            </div>
+            <div class="row" id="productcontainer"> </div>
+        </div>
+
+
+        <!-- About -->
+        <div class="container mt-4 mb-5" id="about">
+            <h1 class="text-center mb-5"
+                style="text-align: center; letter-spacing: 1px; font-weight:600; text-shadow: 2px 2px 5px #323131da;">
+                ABOUT US
+            </h1>
+            <div class="row" style="display: flex;">
+                <div class="col-md-6 ">
+                    <div class="image">
+                        <img src="images/discount.jpg" alt="About us"
+                            class="img-fluid rounded shadow-lg border border-2 border-light">
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="blogtext mb-5">
+                        <p style="font-size: 18px; line-height: 1.8; text-align: justify;">
+                            Welcome to <strong style="color:var(--color)">YourBrand</strong>, where fashion meets
+                            functionality. We're not just a store — we're a vibrant community driven by passion,
+                            personality, and purpose. From chic trends to timeless essentials, we curate collections to
+                            help
+                            you look and feel your best every day.
+                        </p>
+                        <p style="font-size: 18px; line-height: 1.8; text-align: justify;">
+                            Since our launch, we have focused on blending <strong>sustainability</strong>,
+                            <strong>comfort</strong>, and <strong>customer delight</strong>. Our mission is simple:
+                            high-quality fashion at prices that make sense — with a conscience.
+                        </p>
+                        <p style="font-size: 18px; line-height: 1.8; text-align: justify;">
+                            Ready to redefine your wardrobe? Let’s make style effortless together.
+                        </p>
+                        <a href="#productOverview" class="btn  btn-lg mt-3 px-4 shadow-sm"
+                            style="background-color: var(--background-color); color: white;">Start Shopping <i
+                                class="fas fa-arrow-right ms-2"></i></a>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+
+        <!-- Brand -->
+        <div class="container-fluid pb-5">
+            <div class="row" style="background-color: #f5f7f9;">
+                <div class="col-md-12 text-center">
+                    <img src="images/brand1.png" class="p-5" alt="">
+                    <img src="images/brand2.png" class="p-5" alt="">
+                    <img src="images/brand3.png" class="p-5" alt="">
+                    <img src="images/brand4.png" class="p-5" alt="">
+                    <img src="images/brand5.png" class="p-5" alt="">
+                    <img src="images/brand6.png" class="p-5" alt="">
+                </div>
+            </div>
+        </div>
+
+        <!-- Blog -->
+        <div class="container mb-5">
+            <h1 style="text-align: center; letter-spacing: 1px; font-weight:600; text-shadow: 2px 2px 5px #323131da;"
+                id="productOverview" class="mb-5">BLOG
+                SECTION</h1>
+
+            <div class="row row-cols-1 row-cols-md-3 blog" id="blog">
+                <div class="col">
+                    <div class="card h-100">
+                        <img src="images/insta-2.jpg" class="card-img-top" alt="">
+                        <div class="card-img-overlay">
+                            <h5 class="card-title">Summer Lookbook 2025</h5>
+                            <p class="card-text">Explore this years trending colors, cuts, and casual styles perfect for
+                                the
+                                heat.</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col">
+                    <div class="card h-100">
+                        <img src="images/insta-3.jpg" class="card-img-top" alt="">
+                        <div class="card-img-overlay">
+                            <h5 class="card-title">Weekend Wardrobe Goals</h5>
+                            <p class="card-text">Cozy layers and effortless chic—your go-to outfits for slow Sundays.
+                            </p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col">
+                    <div class="card h-100">
+                        <img src="images/insta-4.jpg" class="card-img-top" alt="">
+                        <div class="card-img-overlay">
+                            <h5 class="card-title">Street Style Diaries</h5>
+                            <p class="card-text">Unfiltered fashion straight from the city streets—raw, real, and
+                                relatable.
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+        <!-- contact us -->
+        <div class="container mb-5" id="contact">
+            <h2 class="text-center mb-4" style="font-weight: 700; letter-spacing: 1px;">Get in Touch</h2>
+            <div class="row" style="display: flex; justify-content: center; gap: 40px;">
+                <div class="col-md-5">
+                    <form>
+                        <div class="mb-3">
+                            <label for="name" class="form-label">Name</label>
+                            <input type="text" class="form-control" id="name" placeholder="Your name">
+                        </div>
+                        <div class="mb-3">
+                            <label for="email" class="form-label">Email</label>
+                            <input type="email" class="form-control" id="email" placeholder="Your email">
+                        </div>
+                        <div class="mb-3">
+                            <label for="message" class="form-label">Message</label>
+                            <textarea class="form-control" id="message" rows="4" placeholder="Your message"></textarea>
+                        </div>
+                        <button type="submit" class="btn ">Send</button>
+                    </form>
+                </div>
+
+                <div class="col-md-5">
+                    <h5>Contact Details</h5>
+                    <p><b>Location:</b> Ahmedabad, Gujarat</p>
+                    <p><b>Email:</b> nirali@example.com</p>
+                    <p><b>Phone:</s> +91 98765 43210</p>
+                </div>
+
+
+            </div>
+        </div>
+
+
+
+
+
+        <!--Footer  -->
+        <div class="container-fluid footer">
+            <div class="container">
+                <div class="row">
+                    <div class="col-lg-3 text-center">
+                        <h5>CATEGORIES</h5>
+                        <ul class="list-unstyled">
+                            <li><a href="#">Women</a></li>
+                            <li><a href="#">Men</a></li>
+                            <li><a href="#">Shoes</a></li>
+                            <li><a href="#">Watches</a></li>
+                        </ul>
+                    </div>
+                    <div class="col-lg-3 text-center">
+                        <h5>HELP</h5>
+                        <ul class="list-unstyled">
+                            <li><a href="#">Track Order</a></li>
+                            <li><a href="#">Return</a></li>
+                            <li><a href="#">Shipping</a></li>
+                            <li><a href="#">FAQs</a></li>
+                        </ul>
+                    </div>
+                    <div class="col-lg-3 text-center">
+                        <h5>Quick Links</h5>
+                        <p class="p1">Any questions? Let us know in store at 8th floor, 379 Hudson St, New York, NY
+                            10018 or
+                            call us on
+                            (+1) 96 716 6879</p>
+                        <a href="https://www.facebook.com/" target="_blank" class="social"><i
+                                class="fab fa-facebook-f"></i></a>
+                        <a href="https://www.instagram.com/" target="_blank" class="social"><i
+                                class="fab fa-instagram"></i></a>
+                        <a href="https://in.pinterest.com/login/" target="_blank" class="social"><i
+                                class="fab fa-pinterest"></i></a>
+                    </div>
+                    <div class="col-lg-3  instagram text-center">
+                        <h5>newsletter</h5>
+                        <div class="newsletter">
+                            <input class="email" type="text" name="email" placeholder="email@example.com">
+                            <br>
+                            <button>SUBSCRIBE</button>
+                        </div>
+                    </div>
+                </div>
+                <div class="row mt-4">
+                    <div class=" text-center  mb-3  payment-methods">
+                        <img src="Images/card-1.png" alt="">
+                        <img src="Images/card-2.png" alt="">
+                        <img src="Images/card-3.png" alt="">
+                        <img src="Images/card-4.png" alt="">
+                    </div>
+                    <div class=" text-center ">
+                        <p>
+                            Copyright ©2025 all right reserved | Made with <i class="far fa-heart fa-xs"></i> by <a
+                                href="https://colorlib.com" target="_blank">Colorlib</a> & distributed by
+                            <a href="https://themewagon.com" target="_blank">ThemeWagon</a>
+                        </p>
+                    </div>
+                </div>
+            </div>
+            <a href="#top"><i class="fas fa-chevron-up fa-xs p-2 "
+                    style="background-color: #7180e0a2;font-size:20px;color: rgb(191, 188, 188, 0.884 );"></i></a>
+
+        </div>
+    </div>
+    <script src="website.js"></script>
+</body>
+
+</html>

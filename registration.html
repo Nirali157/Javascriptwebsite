@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+    <link rel="icon" href="images/copyright.png" type="image/png">
+
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.5/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-SgOJa3DmI69IUzQ2PVdRZhwQ+dy64/BUtbMJw1MZ8t5HZApcHrRKUc4W0kG879m7" crossorigin="anonymous">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.5/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-k6d4wzSIapyDyv1kpU366/PK5hCdSbCRGRCMv+eplOQJWyd1fbcAu9OCUj5zNLiq"
+        crossorigin="anonymous"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css"
+        integrity="sha512-1ycn6IcaQQ40/MKBW2W4Rhis/DbILU74C1vSrLJxCq57o941Ym01SwNsOMqvEBFlcgUa6xLiPY/NS5R+E6ztJQ=="
+        crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <style>
+        .error {
+            color: red;
+        }
+
+        .container {
+            width: 600px;
+
+            a {
+                text-decoration: none;
+                text-align: center;
+            }
+
+            .detail {
+                text-align: center;
+            }
+
+            .btn {
+                font-size: 19px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container shadow p-3 bg-body-tertiary rounded mt-5">
+        <h1 class="text-center pb-4 pt-4">Registration</h1>
+
+        <form id="myform">
+            <div class="row mb-3">
+                <div class="col-sm-6">
+                    <label class="col-form-label">Name</label>
+                    <input type="text" name="name" id="name" class="form-control">
+                    <span class="error" id="nameerror"></span>
+                </div>
+
+                <div class="col-sm-6">
+                    <label class="col-form-label">Email</label>
+                    <input type="email" name="email" id="email" class="form-control">
+                    <span class="error" id="emailerror"></span>
+                </div>
+            </div>
+
+            <div class="row mb-3 ">
+                <div class="col-sm-6">
+                    <label class="col-form-label">Passowrd</label>
+                    <input type="password" name="password" id="password" class="form-control">
+                    <span class="error" id="passworderror"></span>
+                </div>
+
+                <div class="col-sm-6">
+                    <label class="col-form-label">Confirm Password</label>
+                    <input type="password" name="confirmpassword" id="confirmpassword" class="form-control">
+                    <span class="error" id="confirmpassworderror"></span>
+                </div>
+            </div>
+
+            <div class="row mb-3">
+                <div class="col-sm-6">
+                    <label class="col-form-label">Gender</label>
+                    <select name="gender" id="gender" class="form-control">
+                        <option value="">--- Select ---</option>
+                        <option value="male">Male</option>
+                        <option value="female">Female</option>
+                        <option value="other">Other</option>
+                    </select>
+                    <span class="error" id="gendererror"></span>
+                </div>
+
+                <div class="col-sm-6">
+                    <label class="col-form-label">Date of Birth</label>
+                    <input type="date" name="date" id="date" class="form-control">
+                    <span class="error" id="dateerror"></span>
+                </div>
+            </div>
+            <div class="row">
+                <button type="submit" class="btn btn-dark pt-2 pb-2 mt-5 mb-3" onclick="signup()">Sign up</button>
+                <span class="detail mb-3">Already have an account ? <a href="login.html">Login</a></span>
+            </div>
+        </form>
+    </div>
+
+    <script>
+        document.getElementById("myform").addEventListener("submit", function (event) {
+            event.preventDefault();
+
+            let isValid = true;
+
+            const email = document.getElementById("email").value.trim();
+            const password = document.getElementById("password").value;
+            const name = document.getElementById("name").value.trim()
+
+
+            const validationRules = {
+                name: value => value.trim().length >= 5,
+                password: value => value.length >= 6,
+                confirmpassword: value => value === document.getElementById("password").value,
+                email: value => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value),
+                date: value => value !== '',
+                gender: value => value !== ''
+            };
+
+            const errorMessages = {
+                name: "Name must be at least 5 characters.",
+                password: "Password must be at least 6 characters.",
+                confirmpassword: "Passwords do not match.",
+                email: "Please enter a valid email address.",
+                date: "Please select a date of birth.",
+                gender: "Please select a gender."
+            };
+
+            document.querySelectorAll(".error").forEach(function (errorElement) {
+                errorElement.textContent = '';
+            });
+
+
+            for (let field in validationRules) {
+                const inputElement = document.getElementById(field);
+                const value = inputElement ? inputElement.value : '';
+                const isFieldValid = validationRules[field](value);
+
+                if (!isFieldValid) {
+                    document.getElementById(field + "error").textContent = errorMessages[field];
+                    isValid = false;
+                }
+            }
+
+            if (isValid) {
+                localStorage.setItem("userEmail", email);
+                localStorage.setItem("userName", name);
+                localStorage.setItem("userPassword", password);
+            }
+        });
+        function signup(){
+            window.location.href="login.html"
+        }
+    </script>
+</body>
+
+</html>
